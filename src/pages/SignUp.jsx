@@ -1,7 +1,11 @@
 import { useState } from "react"
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
+import {db} from '../firebase.config';
 import { Link, useNavigate } from "react-router-dom"
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import { toast } from "react-toastify";
 
 export const SignUp = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +22,27 @@ export const SignUp = (props) => {
     }))
   };
 
+  const onSubmit = async e => {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const {user} = await createUserWithEmailAndPassword(
+        auth, 
+        email, 
+        password
+      );
+
+      const userData = {...formData, timestamp: serverTimestamp()};
+      delete userData.password;
+      await setDoc(doc(db, "users", user.uid), userData);
+      updateProfile(auth.currentUser, {displayName: name});
+
+      navigate('/');
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <>
       <div className="pageContainer">
@@ -25,12 +50,12 @@ export const SignUp = (props) => {
           <p className="pageHeader">Welcome Back!</p>
         </header>
         <main>
-          <form action="">
+          <form onSubmit={onSubmit}>
           <input
-              id="text"
-              type="name"
+              id="name"
+              type="text"
               className="nameInput"
-              placeholder="Email"
+              placeholder="Name"
               value={name}
               onChange={onChange}
             />
