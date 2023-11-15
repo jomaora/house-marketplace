@@ -9,6 +9,7 @@ import { Offers } from "./pages/Offers";
 import { Profile } from "./pages/Profile";
 import NavBar from "./components/NavBar";
 import PrivateRoute from "./components/PrivateRoute";
+import { Category } from "./pages/Category";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/offers" element={<Offers/>}/>
+        <Route path="/category/:categoryName" element={<Category/>}/>
         <Route path="/profile" element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>} />
         </Route>
