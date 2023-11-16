@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase.config";
 import { query, collection, where, getDocs, orderBy, limit, startAfter } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ListingItem } from "../components/ListingItem";
 
  export const Category = () => {
   let { categoryName } = useParams();
@@ -39,7 +39,7 @@ import { toast } from "react-toastify";
         <main>
           <ul className="categoryListings">
           {listings.map(item => {
-              return (<li key={item.id}>{item.id} {item.data.name}</li>)
+              return (<ListingItem listing={item.data} id={item.id} key={item.id}/>)
           })}
           </ul>
         </main>
